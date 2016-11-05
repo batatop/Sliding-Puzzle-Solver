@@ -15,13 +15,14 @@ int main(){
     string solution= "";
     SearchAlgorithms bfs;
     int blockNum= 0;
-    int board[6][6];
+    char board[6][6];
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
-            board[i][j]= 0;
+            board[i][j]= '0';
         }
     }
     int counter=0;
+
 
     if(inFile.is_open()){
         while(getline(inFile, oneLine)){
@@ -42,6 +43,7 @@ int main(){
         inFile.close();
 
         BlockGame *game= new BlockGame(blocks, blockNum);
+        //cout<<game->getInitialState()<<endl;
         solution+= game->getInitialState();
         //cout<<game->actions(game->getInitialState())<<endl;
         //game->printPossibleStates(game->actions(game->getInitialState()));
@@ -60,5 +62,7 @@ int main(){
     else{
         cout<<"Unable to read the file."<<endl;
     }
+
     return 0;
+
 }

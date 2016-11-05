@@ -28,13 +28,13 @@ class BlockGame {
         string fillBoard(Block blocks[], int blockNum);
         //Fills the board
 
-        void printBoard(int board[][6]);
+        void printBoard(char board[][6]);
         //Prints the current state
 
         void printPossibleStates(string possibleStates);
         //Print the state in a pleasant way
 
-        string boardToState(int board[][6]);
+        string boardToState(char board[][6]);
         //Converts the board to a state
 
         string actions(string state);
@@ -53,7 +53,7 @@ class BlockGame {
         //prints the output version
 
     private:
-        int board[6][6];
+        char board[6][6];
         string initialState;
         int blockNum;
 };

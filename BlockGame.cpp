@@ -20,7 +20,7 @@ BlockGame::BlockGame(Block allBlocks[], int blockNumber){
     initialState= fillBoard(blocks, blockNum);
 }
 
-void BlockGame::printBoard(int board[][6]){
+void BlockGame::printBoard(char board[][6]){
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
             cout<<board[i][j];
@@ -29,11 +29,12 @@ void BlockGame::printBoard(int board[][6]){
     }
 }
 
-string BlockGame::boardToState(int board[][6]){
+string BlockGame::boardToState(char board[][6]){
+    //printBoard(board);
     string state="";
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
-            state+= to_string(board[i][j]);
+            state+= board[i][j];
         }
     }
     return state;
@@ -57,15 +58,18 @@ string BlockGame::output(string allStates){
             }
         }
         counter= 0;
-        // printBoard(tempBoard);
+        //printBoard(tempBoard);
         // cout<<"\n"<<endl;
 
         blockNum=0;
+        char charBlockNum= blockNum+'0';
         for(int i=0; i<36; i++){
-            if((state[i]-48)>blockNum){
-                blockNum= (state[i]-48);
+            if(state[i]>charBlockNum){
+                charBlockNum= state[i];
             }
         }
+        blockNum= charBlockNum-'0';
+        //cout<<blockNum<<endl;
 
         Block blocks[blockNum];
         int tempBlockNum= 0;
@@ -121,37 +125,39 @@ string BlockGame::output(string allStates){
 
 string BlockGame::actions(string state){
     string allPossibleActions= "";
-    int tempBoard[6][6];
+    char tempBoard[6][6];
     //State to board
     int counter= 0;
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
-            tempBoard[i][j]= state[counter] - '0';
+            tempBoard[i][j]= state[counter];
             counter++;
         }
     }
-    //printBoard(tempBoard);
     //cout<<"\n"<<endl;
 
-    int blockNum= 0;
+    blockNum=0;
+    char charBlockNum= blockNum+'0';
     for(int i=0; i<36; i++){
-        if((state[i]-48)>blockNum){
-            blockNum= (state[i]-48);
+        if(state[i]>charBlockNum){
+            charBlockNum= state[i];
         }
     }
+    blockNum= charBlockNum-'0';
+    //cout<<blockNum<<endl;
 
     Block blocks[blockNum];
     int tempBlockNum= 0;
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
-            if(tempBoard[i][j]!=0){
-                tempBlockNum= tempBoard[i][j];
+            if(tempBoard[i][j]!='0'){
+                tempBlockNum= tempBoard[i][j]-'0';
                 //cout<<"t: "<<tempBlockNum<<endl;
-                if(tempBoard[i+1][j]==tempBlockNum){
+                if(tempBoard[i+1][j]==tempBlockNum+'0'){
                     blocks[tempBlockNum-1].direction= 'v';
                     //cout<<"1. if"<<endl;
                 }
-                else if(tempBoard[i][j+1]==tempBlockNum){
+                else if(tempBoard[i][j+1]==tempBlockNum+'0'){
                     blocks[tempBlockNum-1].direction= 'h';
                     //cout<<"2. if"<<endl;
                 }
@@ -166,7 +172,7 @@ string BlockGame::actions(string state){
                 else if(blocks[tempBlockNum-1].direction== 'v'){
                     for(int k=0; k<6; k++){
                         for(int l=0; l<6; l++){
-                            if(tempBoard[k][l]== tempBlockNum){
+                            if(tempBoard[k][l]== tempBlockNum+'0'){
                                 blocks[tempBlockNum-1].x= i;
                                 blocks[tempBlockNum-1].y= j;
                                 //cout<<"4. if"<<endl;
@@ -183,6 +189,8 @@ string BlockGame::actions(string state){
         cout<<blocks[i].x+1<<" "<<blocks[i].y+1<<" "<<blocks[i].length<<" "<<blocks[i].direction<<endl;
     }
     */
+    //printBoard(tempBoard);
+    //cout<<""<<endl;
 
     for(int i=0; i<blockNum; i++){
         if(blocks[i].direction== 'h'){
@@ -215,19 +223,18 @@ string BlockGame::actions(string state){
 }
 
 string BlockGame::fillBoard(Block blocks[], int blockNum){
-    int tempBoard[6][6];
+    char tempBoard[6][6];
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
-            tempBoard[i][j]= 0;
+            tempBoard[i][j]= '0';
         }
     }
-
     for(int i=0; i<blockNum; i++){
         if(blocks[i].x>6 || blocks[i].y>6){
             //cout<<"Base block is out of the board."<<endl;
             return "0";
         }
-        else if(tempBoard[blocks[i].x][blocks[i].y]!=0){
+        else if(tempBoard[blocks[i].x][blocks[i].y]!='0'){
             //cout<<"Base block collapses."<<endl;
             return "0";
         }
@@ -237,7 +244,7 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
     for(int i=0; i<blockNum; i++){
         if(blocks[i].direction=='v'){
             for(int j=0; j<blocks[i].length; j++){
-                if(tempBoard[(blocks[i].x)-j][blocks[i].y]!=0){
+                if(tempBoard[(blocks[i].x)-j][blocks[i].y]!='0'){
                     //cout<<"Two block collapses. (v)"<<endl;
                     return "0";
                 }
@@ -246,14 +253,14 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
                     return "0";
                 }
                 else{
-                    tempBoard[blocks[i].x-j][blocks[i].y]=blockCounter;
+                    tempBoard[blocks[i].x-j][blocks[i].y]=blockCounter+'0';
                 }
             }
             blockCounter++;
         }
         else if(blocks[i].direction=='h'){
             for(int j=0; j<blocks[i].length; j++){
-                if(tempBoard[blocks[i].x][(blocks[i].y+j)]!=0){
+                if(tempBoard[blocks[i].x][(blocks[i].y+j)]!='0'){
                     //cout<<"Two block collapses. (h)"<<endl;
                     return "0";
                 }
@@ -262,7 +269,7 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
                     return "0";
                 }
                 else{
-                    tempBoard[blocks[i].x][blocks[i].y+j]=blockCounter;
+                    tempBoard[blocks[i].x][blocks[i].y+j]=blockCounter+'0';
                 }
             }
             blockCounter++;
@@ -299,7 +306,6 @@ string BlockGame::move(string way, int target, Block blocks[], int blockNum){
 
 
     if(fillBoard(tempBlocks, blockNum)!="0"){
-
         return fillBoard(tempBlocks, blockNum);
     }
 

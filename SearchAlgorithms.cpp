@@ -21,6 +21,7 @@ string SearchAlgorithms::breadthFirstSearch(BlockGame problem){
         return solution(node);
     }
     queue<Node*> frontier;
+    queue<Node*> tempQueue;
     frontier.push(node);
     set<string> explored;
     bool is_in;
@@ -50,6 +51,16 @@ string SearchAlgorithms::breadthFirstSearch(BlockGame problem){
             child->parent= node;
             is_in= explored.find(child->state) != explored.end();
             //cout<<is_in<<endl;
+
+            int tempSize= frontier.size();
+            tempQueue= frontier;
+            while(!tempQueue.empty() && !is_in){
+                if(tempQueue.front()->state == child->state){
+                    is_in= true;
+                }
+                tempQueue.pop();
+            }
+
             if(!is_in){
                 if(problem.checkWin(child->state)){
                     //cout<<"bitti mi lo"<<endl;
@@ -66,7 +77,6 @@ string SearchAlgorithms::breadthFirstSearch(BlockGame problem){
         i=0;
         action="";
     }
-
 }
 
 string SearchAlgorithms::solution(Node* node){

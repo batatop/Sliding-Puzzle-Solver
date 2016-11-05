@@ -3,7 +3,9 @@
 #ifndef SEARCHALGORITHMS
 #define SEARCHALGORITHMS
 
-#include<iostream>
+#include <iostream>
+#include <queue>
+#include <set>
 #include <string>
 #include "BlockGame.h"
 
