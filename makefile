@@ -11,4 +11,4 @@ SearchAlgorithms.o: SearchAlgorithms.cpp SearchAlgorithms.h
 	g++ -c -std=c++11 SearchAlgorithms.cpp
 
 clean:
-	rm *.o prog
+	rm -f *.o prog solution.txt

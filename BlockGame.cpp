@@ -1,7 +1,8 @@
 //BlockGame.cpp
 
-#include<iostream>
+#include <iostream>
 #include <string>
+#include <stdlib.h>
 #include "BlockGame.h"
 
 using namespace std;
@@ -30,7 +31,6 @@ void BlockGame::printBoard(char board[][6]){
 }
 
 string BlockGame::boardToState(char board[][6]){
-    //printBoard(board);
     string state="";
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
@@ -49,8 +49,6 @@ string BlockGame::output(string allStates){
     int index= 0;
     while(index<allStates.length()){
         state= allStates.substr(index, 36);
-        //cout<<"burda"<<endl;
-        //cout<<allStates<<endl;
         for(int i=0; i<6; i++){
             for(int j=0; j<6; j++){
                 tempBoard[i][j]= state[counter] - '0';
@@ -58,8 +56,6 @@ string BlockGame::output(string allStates){
             }
         }
         counter= 0;
-        //printBoard(tempBoard);
-        // cout<<"\n"<<endl;
 
         blockNum=0;
         char charBlockNum= blockNum+'0';
@@ -69,7 +65,6 @@ string BlockGame::output(string allStates){
             }
         }
         blockNum= charBlockNum-'0';
-        //cout<<blockNum<<endl;
 
         Block blocks[blockNum];
         int tempBlockNum= 0;
@@ -77,21 +72,17 @@ string BlockGame::output(string allStates){
             for(int j=0; j<6; j++){
                 if(tempBoard[i][j]!=0){
                     tempBlockNum= tempBoard[i][j];
-                    //cout<<"t: "<<tempBlockNum<<endl;
                     if(tempBoard[i+1][j]==tempBlockNum){
                         blocks[tempBlockNum-1].direction= 'v';
-                        //cout<<"1. if"<<endl;
                     }
                     else if(tempBoard[i][j+1]==tempBlockNum){
                         blocks[tempBlockNum-1].direction= 'h';
-                        //cout<<"2. if"<<endl;
                     }
                     blocks[tempBlockNum-1].length++;
                     if(blocks[tempBlockNum-1].direction== 'h'){
                         if(tempBoard[i][j]!=tempBoard[i][j-1]){
                             blocks[tempBlockNum-1].x= i;
                             blocks[tempBlockNum-1].y= j;
-                            //cout<<"3. if"<<endl;
                         }
                     }
                     else if(blocks[tempBlockNum-1].direction== 'v'){
@@ -100,7 +91,6 @@ string BlockGame::output(string allStates){
                                 if(tempBoard[k][l]== tempBlockNum){
                                     blocks[tempBlockNum-1].x= i;
                                     blocks[tempBlockNum-1].y= j;
-                                    //cout<<"4. if"<<endl;
                                 }
                             }
                         }
@@ -115,18 +105,13 @@ string BlockGame::output(string allStates){
         }
         solution+="\n";
     }
-/*
-    for(int i=0; i<blockNum; i++){
-        solution+= blocks[i].x+1+" "+blocks[i].y+1+" "+blocks[i].length+" "+blocks[i].direction+"\n";
-    }
-*/
+
     return solution;
 }
 
 string BlockGame::actions(string state){
     string allPossibleActions= "";
     char tempBoard[6][6];
-    //State to board
     int counter= 0;
     for(int i=0; i<6; i++){
         for(int j=0; j<6; j++){
@@ -134,7 +119,6 @@ string BlockGame::actions(string state){
             counter++;
         }
     }
-    //cout<<"\n"<<endl;
 
     blockNum=0;
     char charBlockNum= blockNum+'0';
@@ -144,7 +128,6 @@ string BlockGame::actions(string state){
         }
     }
     blockNum= charBlockNum-'0';
-    //cout<<blockNum<<endl;
 
     Block blocks[blockNum];
     int tempBlockNum= 0;
@@ -152,21 +135,17 @@ string BlockGame::actions(string state){
         for(int j=0; j<6; j++){
             if(tempBoard[i][j]!='0'){
                 tempBlockNum= tempBoard[i][j]-'0';
-                //cout<<"t: "<<tempBlockNum<<endl;
                 if(tempBoard[i+1][j]==tempBlockNum+'0'){
                     blocks[tempBlockNum-1].direction= 'v';
-                    //cout<<"1. if"<<endl;
                 }
                 else if(tempBoard[i][j+1]==tempBlockNum+'0'){
                     blocks[tempBlockNum-1].direction= 'h';
-                    //cout<<"2. if"<<endl;
                 }
                 blocks[tempBlockNum-1].length++;
                 if(blocks[tempBlockNum-1].direction== 'h'){
                     if(tempBoard[i][j]!=tempBoard[i][j-1]){
                         blocks[tempBlockNum-1].x= i;
                         blocks[tempBlockNum-1].y= j;
-                        //cout<<"3. if"<<endl;
                     }
                 }
                 else if(blocks[tempBlockNum-1].direction== 'v'){
@@ -175,7 +154,6 @@ string BlockGame::actions(string state){
                             if(tempBoard[k][l]== tempBlockNum+'0'){
                                 blocks[tempBlockNum-1].x= i;
                                 blocks[tempBlockNum-1].y= j;
-                                //cout<<"4. if"<<endl;
                             }
                         }
                     }
@@ -184,37 +162,21 @@ string BlockGame::actions(string state){
         }
     }
 
-    /*
-    for(int i=0; i<blockNum; i++){
-        cout<<blocks[i].x+1<<" "<<blocks[i].y+1<<" "<<blocks[i].length<<" "<<blocks[i].direction<<endl;
-    }
-    */
-    //printBoard(tempBoard);
-    //cout<<""<<endl;
-
     for(int i=0; i<blockNum; i++){
         if(blocks[i].direction== 'h'){
             if(move("left", i, blocks, blockNum)!= "0"){
                 allPossibleActions+= move("left", i, blocks, blockNum);
-                //cout<<"Left:"<<endl;
-                //printStateOnABoard(move("left", i, blocks, blockNum));
             }
             if(move("right", i, blocks, blockNum)!= "0"){
                 allPossibleActions+= move("right", i, blocks, blockNum);
-                //cout<<"Right:"<<endl;
-                //printStateOnABoard(move("right", i, blocks, blockNum));
             }
         }
         else if(blocks[i].direction== 'v'){
             if(move("up", i, blocks, blockNum)!= "0"){
                 allPossibleActions+= move("up", i, blocks, blockNum);
-                //cout<<"Up:"<<endl;
-                //printStateOnABoard(move("up", i, blocks, blockNum));
             }
             if(move("down", i, blocks, blockNum)!= "0"){
                 allPossibleActions+= move("down", i, blocks, blockNum);
-                //cout<<"Down:"<<endl;
-                //printStateOnABoard(move("down", i, blocks, blockNum));
             }
         }
     }
@@ -231,11 +193,9 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
     }
     for(int i=0; i<blockNum; i++){
         if(blocks[i].x>6 || blocks[i].y>6){
-            //cout<<"Base block is out of the board."<<endl;
             return "0";
         }
         else if(tempBoard[blocks[i].x][blocks[i].y]!='0'){
-            //cout<<"Base block collapses."<<endl;
             return "0";
         }
     }
@@ -245,11 +205,9 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
         if(blocks[i].direction=='v'){
             for(int j=0; j<blocks[i].length; j++){
                 if(tempBoard[(blocks[i].x)-j][blocks[i].y]!='0'){
-                    //cout<<"Two block collapses. (v)"<<endl;
                     return "0";
                 }
                 else if((blocks[i].x-j)>5 || (blocks[i].x-j)<0){
-                    //cout<<"Block goes out of bounds. (v)"<<endl;
                     return "0";
                 }
                 else{
@@ -261,11 +219,9 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
         else if(blocks[i].direction=='h'){
             for(int j=0; j<blocks[i].length; j++){
                 if(tempBoard[blocks[i].x][(blocks[i].y+j)]!='0'){
-                    //cout<<"Two block collapses. (h)"<<endl;
                     return "0";
                 }
                 else if((blocks[i].y+j)>5 || (blocks[i].y+j)<0){
-                    //cout<<"Block goes out of bounds. (h)"<<endl;
                     return "0";
                 }
                 else{
@@ -275,12 +231,6 @@ string BlockGame::fillBoard(Block blocks[], int blockNum){
             blockCounter++;
         }
     }
-
-/*
-    printBoard(tempBoard);
-    cout<<""<<endl;
-    cout<<"State: "<<boardToState(tempBoard)<<endl;
-*/
 
     return boardToState(tempBoard);
 }
@@ -341,4 +291,48 @@ void BlockGame::printPossibleStates(string possibleStates){
         index+= 36;
         indexTwo= 0;
     }
+}
+
+int BlockGame::distanceToStart(string state){
+    string checkingState= initialState;
+    int distance= 0;
+    char tempBoard[6][6];
+
+    bool found= false;
+    for(int i=0; i<6; i++){
+        for(int j=0; j<6; j++){
+            if(!found && checkingState[(i*6)+j]=='1'){
+                distance= j;
+                found= true;
+            }
+        }
+    }
+
+    checkingState= state;
+    found= false;
+    for(int i=0; i<6; i++){
+        for(int j=0; j<6; j++){
+            if(!found && checkingState[(i*6)+j]=='1'){
+                distance= j - distance;
+                found= true;
+            }
+        }
+    }
+
+    return abs(distance);
+}
+
+int BlockGame::distanceToFinish(string state){
+    int distance= 0;
+    char tempBoard[6][6];
+
+    for(int i=0; i<6; i++){
+        for(int j=0; j<6; j++){
+            if(state[(i*6)+j]=='1'){
+                distance= 5 - j;
+            }
+        }
+    }
+
+    return abs(distance);
 }
